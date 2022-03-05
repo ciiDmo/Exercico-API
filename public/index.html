@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRONTEND-TEST - CIDMAR</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="roof">
+        <h1>Teste de Frontend</h1>
+    </header>
+    <div class="container">
+        <span>Selecione uma das opções, devidamente preenchida, para realizar a impressão da listagem na tela!</span>
+        
+        <div class="filters">
+            <label>Selecione o tipo de informação que deseja filtrar:</label>
+            <div>
+                <select id="tipo">
+                    <option selected>Selecione um item...</option>
+                    <option>category</option>
+                    <option>name</option>
+                    <option>country</option>
+                    <option>state</option>
+                    <option>city</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters">
+            <label>Listar <strong>todos</strong> itens: </label>
+            <input type="button" value="Filtrar" onclick= fetchAll() />
+        </div>
+        
+        <div class="filters">
+            <label>Listar <strong>todos</strong> itens em ordem <strong>alfabética</strong>: </label>
+            <input type="button" value="Filtrar" onclick= sortName() />
+        </div>
+        
+        <div class="filters">
+            <label>Listar uma certa quantidade de itens <strong>randomicamente</strong>: </label>
+            <div><input type="number" id="rand" />
+            <input type="button" value="Filtrar" onclick= fetchRandom() /></div>
+        </div>
+       
+        <div class="filters">
+            <label>Listar itens que <strong>contém</strong> o caractere: </label>
+            <input type="text" id="word" />
+            <input type="button" value="Filtrar" onclick= sortWord() />
+        </div>
+        
+        <div class="filters">
+            <label>Listar itens que <strong>iniciam</strong> com o caractere: </label>
+            <input type="text" id="letter" />
+            <input type="button" value="Filtrar" onclick= sortLetter() />
+        </div>
+        
+        <div class="filters"><input type="button" value="LIMPAR" onclick="eraseAll()" /></div>
+        
+        <div id="content"></div>
+    </div>
+    <footer class="floor">Cidmar Oliveira - 2022</footer>
+    <script>
+        //como me foi tirado certo tempo de execução do teste, realizei de forma mais rápida e simples
+        //Neste caso trabalhei apenas com apenas um dos dados de cada item, esse dado foi o nome
+
+        //Faz fetch de todos itens
+        function fetchAll(url) {
+            fetch("/api")            
+                .then((response) => response.json())
+                .then(data => {
+                    let itens = document.getElementById("content");
+                    let tipo = document.getElementById("tipo").value
+                    itens.innerHTML = ''
+                    data.forEach(beer => {
+                        let div = document.createElement("div");
+                        div.classList.add('MyClass')
+                        div.innerHTML = beer[`${tipo}`]
+                        itens.appendChild(div);
+                    });
+                })
+        }
+
+        //Faz sort aleatório de uma quantidade de itens n especificados
+        function fetchRandom() {
+            const qnt = document.getElementById("rand").value
+            fetch("/api/random/" + qnt)
+                .then(resp => resp.json())
+                .then(data => {
+                    let itens = document.getElementById("content");
+                    let tipo = document.getElementById("tipo").value
+                    itens.innerHTML = ''
+                    data.forEach(beer => {
+                        let div = document.createElement("div");
+                        div.classList.add('MyClass')
+                        div.innerHTML = beer[`${tipo}`]
+                        itens.appendChild(div);
+                    });
+                })
+        }
+
+        //Faz sort de todos itens em ordem alfabética
+        function sortName() {
+            fetch("/api")
+                .then((response) => response.json())
+                .then(data => {
+                    return data.sort((dataA, dataB) => { 
+                        if(!dataA.name || !dataB.name) {
+                            return 0;
+                        }
+                        return dataA.name.localeCompare(dataB.name)
+                    })
+                })
+                .then(data => {
+                    let itens = document.getElementById("content");
+                    let tipo = document.getElementById("tipo").value
+                    itens.innerHTML = ''
+                    data.forEach(beer => {
+                        let div = document.createElement("div");
+                        div.classList.add('MyClass')
+                        div.innerHTML = beer[`${tipo}`]
+                        itens.appendChild(div);
+                    })
+                })
+        }
+
+        //Faz sort dos itens que contém a palavra especificada
+        function sortWord() {
+            fetch("/api")
+                .then((response) => response.json())
+                .then(data => {
+                    var singWord = document.getElementById("word").value
+                    return data.filter((beer) => {
+                    return beer.name && beer.name.indexOf(singWord) >= 0;
+                })
+            })
+                .then(data => {
+                        let itens = document.getElementById("content");
+                        let tipo = document.getElementById("tipo").value
+                        itens.innerHTML = ''
+                        data.forEach(beer => {
+                            let div = document.createElement("div");
+                            div.classList.add('MyClass')
+                            div.innerHTML = beer[`${tipo}`]
+                            itens.appendChild(div);
+                })
+        })
+}
+
+        //Faz sort dos itens que começam com um caractere especificada
+        function sortLetter() {
+            fetch("/api")
+                .then((response) => response.json())
+                .then(data => {
+                    var singLetter = document.getElementById("letter").value
+                    return data.filter((beer) => {
+                        return beer.name && beer.name.startsWith(singLetter);
+                    })
+                })
+                .then(data => {
+                    let itens = document.getElementById("content");
+                    let tipo = document.getElementById("tipo").value
+                    itens.innerHTML = ''
+                    data.forEach(beer => {
+                        let div = document.createElement("div");
+                        div.classList.add('MyClass')
+                        div.innerHTML = beer[`${tipo}`]
+                        itens.appendChild(div);
+                    })
+                })
+        }
+
+        //Limpa os dados da tela
+        function eraseAll() {
+            let itens = document.getElementById("content")
+            let rand = document.getElementById("rand")
+            let letter = document.getElementById("letter")
+            let word = document.getElementById("word")
+            itens.innerHTML = ''
+            rand.value = ''
+            letter.value = ''
+            word.value = ''
+        }
+    </script>
+</body>
+</html>

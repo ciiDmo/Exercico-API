@@ -1,0 +1,72 @@
+body {
+    background-color: rgb(76, 166, 226);
+}
+
+.roof {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    text-align: center;
+    justify-content: center;
+    max-width: 600px;
+    margin: auto;
+    padding-block: 0.5px;
+    background-color: aliceblue;
+    border-radius: 12px;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.438);
+}
+
+.floor {
+    color: beige;
+    font-size: 12px bold;
+    text-align: center;
+    justify-content: center;
+    margin-top: 2em;
+}
+
+.container {
+    background-color: aliceblue;
+    justify-content: center;
+    border-radius: 12px;
+    max-width: 600px;
+    display: flex;
+    margin: auto;
+    margin-top: 2em;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.438);
+}
+
+.container span {
+    font-size: 20px;
+    word-wrap: normal;
+    inline-size: 500px;
+    overflow-wrap: break-word;
+    margin: auto;
+    margin-top: 1em;
+    text-align: center;
+}
+
+.filters {
+    margin: auto;
+    margin-top: 1em;
+    background-color: rgba(0, 0, 0, 0.596);
+    color: white;
+    padding: 5px;
+    padding-inline: 15px;
+    border-radius: 15px;
+}
+
+#content {
+    align-items: center;
+    text-align: center;
+    margin-top: 0.7em;
+}
+
+.MyClass {
+    background-color: rgba(28, 149, 255, 0.705);
+    color: rgba(0, 0, 0, 0.801);
+    border-radius: 8px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    max-width: 380px;
+}
